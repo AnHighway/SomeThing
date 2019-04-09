@@ -8,3 +8,5 @@
 3.[线程通信和进程通信](https://github.com/AnHighway/SomeThing/blob/master/%E7%BA%BF%E7%A8%8B%E9%80%9A%E4%BF%A1%E4%B8%8E%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E7%9A%84%E5%8C%BA%E5%88%AB)
 
 4.[Socket](https://github.com/AnHighway/SomeThing/blob/master/Socket)
+
+5.[计算机网络一些基础知识](https://github.com/AnHighway/SomeThing/blob/master/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/README.md)
