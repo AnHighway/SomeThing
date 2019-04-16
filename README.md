@@ -14,3 +14,5 @@
 4.[HTTP各种码](https://github.com/AnHighway/SomeThing/blob/master/HTTP%E5%90%84%E7%A7%8D%E7%A0%81)
 
 5.[C++简单实现反射](https://github.com/AnHighway/SomeThing/blob/master/C%2B%2B%20%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0)
+
+6.[C++常用设计模式](https://github.com/AnHighway/SomeThing/tree/master/C++%E5%B8%B8%E7%94%A8%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F)
