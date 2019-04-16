@@ -1,0 +1,60 @@
+模板模式：定义一个操作中的算法的骨架，而将一些步骤延迟到子类中。模板方法使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。
+    主要解决：多个子类有相同的方法，并且逻辑相同，细节有差异。
+    如何解决：对重要，复杂的算法，将核心算法设计为模板方法，周边细节由子类实现，重构时，经常使用的方法，将相同的代码抽象到父类，通过钩子函数约束行为。
+    关键代码：在抽象类实现通用接口，细节变化在子类实现。
+    缺点：每一个不同的实现都需要一个子类来实现，导致类的个数增加，使得系统更加庞大。
+
+class Computer
+{
+public:
+    void product()
+    {
+        installCpu();
+        installRam();
+        installGraphicsCard();
+    }
+
+protected:
+    virtual    void installCpu() = 0;
+    virtual void installRam() = 0;
+    virtual void installGraphicsCard() = 0;
+
+};
+
+class ComputerA:public Computer
+{
+protected:
+    void installCpu() override
+    {
+        cout << "ComputerA install Inter Core i5" << endl;
+    }
+
+    void installRam() override
+    {
+        cout << "ComputerA install 2G Ram" << endl;
+    }
+
+    void installGraphicsCard() override
+    {
+        cout << "ComputerA install Gtx940 GraphicsCard" << endl;
+    }
+};
+
+class ComputerB:public Computer
+{
+protected:
+    void installCpu() override
+    {
+        cout << "ComputerB install Inter Core i7" << endl;
+    }
+
+    void installRam() override
+    {
+        cout << "ComputerB install 4G Ram" << endl;
+    }
+
+    void installGraphicsCard() override
+    {
+        cout << "ComputerB install Gtx960 GraphicsCard" << endl;
+    }
+};
