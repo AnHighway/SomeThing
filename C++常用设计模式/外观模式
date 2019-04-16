@@ -1,0 +1,57 @@
+外观模式：为子系统中的一组接口定义一个一致的界面，外观模式提供了一个高层接口，这个接口使得这一子系统更加容易被使用；对于复杂的系统，系统为客户提供一个简单的接口，把复杂的实现过程封装起来，客户不需要了解系统内部的细节。
+    主要解决：客户不需要了解系统内部复杂的细节，只需要一个接口；系统入口。
+    如何解决：客户不直接与系统耦合，而是通过外观类与系统耦合。
+    关键代码：客户与系统之间加一个外观层，外观层处理系统的调用关系、依赖关系等。
+    缺点：需要修改时不易继承、不易修改
+    class Cpu
+{
+public:
+    void productCpu()
+    {
+        cout << "Product Cpu" << endl;
+    }
+};
+
+class Ram
+{
+public:
+    void productRam()
+    {
+        cout << "Product Ram" << endl;
+    }
+};
+
+class Graphics
+{
+public:
+    void productGraphics()
+    {
+        cout << "Product Graphics" << endl;
+    }
+};
+
+class Computer
+{
+public:
+    void productComputer()
+    {
+        Cpu cpu;
+        cpu.productCpu();
+        Ram ram;
+        ram.productRam();
+        Graphics graphics;
+        graphics.productGraphics();
+    }
+};
+
+int main()
+{
+    //客户直接调用computer生产函数，无需关心具体部件的生产过程。也可直接单独生产部件
+    Computer computer;   
+    computer.productComputer();
+
+    Cpu cpu;
+    cpu.productCpu();
+
+    return 0;
+}
