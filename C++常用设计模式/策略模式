@@ -1,0 +1,152 @@
+ 策略模式:是指定义一系列的算法，把它们一个个封装起来，并且使它们可以互相替换。使得算法可以独立于使用它的客户而变化，也就是说这些算法所完成的功能是一样的，对外接口是一样的，只是各自现实上存在差异。
+    主要解决：在有多种算法相似的情况下，使用 if...else 所带来的复杂和难以维护。
+    何时使用：一个系统有许多许多类，而区分它们的只是他们直接的行为。
+    如何解决：将这些算法封装成一个一个的类，任意地替换。
+    关键代码：实现同一个接口。
+    缺点： 1、策略类会增多。 2、所有策略类都需要对外暴露。
+    //传统策略模式实现
+class Hurt
+{
+public:
+    virtual void redBuff() = 0;
+};
+
+class AdcHurt:public Hurt
+{
+public:
+    void redBuff()
+    {
+        cout << "Adc hurt" << endl;
+    }
+};
+
+class ApcHurt:public Hurt
+{
+public:
+    void redBuff()
+    {
+        cout << "Apc hurt" << endl;
+    }
+};
+
+//方法1：传入一个指针参数
+class Soldier
+{
+public:
+    Soldier(Hurt* hurt):m_hurt(hurt)
+    {
+    }
+    ~Soldier()
+    {
+    }
+    void beInjured()
+    {
+        m_hurt->redBuff();
+    }
+private:
+    Hurt* m_hurt;
+};
+
+//方法2：传入一个参数标签
+typedef enum
+{
+    adc,
+    apc
+}HurtType;
+
+class Master
+{
+public:
+    Master(HurtType type)
+    {
+        switch(type)
+        {
+        case adc:
+            m_hurt = new AdcHurt;
+            break;
+        case apc:
+            m_hurt = new ApcHurt;
+            break;
+        default:
+            m_hurt = NULL;
+            break;
+        }
+    }
+    ~Master()
+    {
+    }
+    void beInjured()
+    {
+        if(m_hurt != NULL)
+        {
+            m_hurt->redBuff();
+        }
+        else
+        {
+            cout << "Not hurt" << endl;
+        }
+    }
+private:
+    Hurt* m_hurt;
+};
+
+//方法3：使用模板类
+template <typename T>
+class Tank
+{
+public:
+    void beInjured()
+    {
+        m_hurt.redBuff();
+    }
+private:
+    T m_hurt;
+};
+//END
+
+//使用函数指针实现策略模式
+void adcHurt(int num)
+{
+    cout << "adc hurt:" << num << endl;
+}
+
+void apcHurt(int num)
+{
+    cout << "apc hurt:" << num << endl;
+}
+
+//普通函数指针
+class Aid
+{
+public:
+    typedef void (*HurtFun)(int);
+    
+    Aid(HurtFun fun):m_fun(fun)
+    {
+    }
+    void beInjured(int num)
+    {
+        m_fun(num);
+    }
+private:
+    HurtFun m_fun;
+};
+
+//使用std::function , 头文件：#include<functional>
+class Bowman
+{
+public:
+    typedef std::function<void(int)> HurtFunc;
+
+    Bowman(HurtFunc fun):m_fun(fun)
+    {
+    }
+    void beInjured(int num)
+    {
+        m_fun(num);
+    }
+
+private:
+    HurtFunc m_fun;
+};
+//END
