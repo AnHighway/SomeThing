@@ -1,0 +1,105 @@
+C++并不支持反射机制，只能自己实现。
+
+如果需要实现字字符串到函数到映射，一定要使用到函数指针。
+
+简单实现反射机制，根据字符串来构造相应到类。主要有以下几点：
+
+(1) 可以使用map保存字符从到函数指针到映射。
+
+(2) 工厂类提供字符串与函数指针到注册关系。
+
+(3) 工厂模式根据不同到字符串构造不同到类对象。
+
+ 
+
+代码示例:
+
+class_factory.h
+
+复制代码
+ 1 #ifndef __CLASSFACTORY_
+ 2 #define __CLASSFACTORY_
+ 3 
+ 4 #include <iostream>
+ 5 #include<string>
+ 6 #include<map>
+ 7 
+ 8 //定义函数指针
+ 9 typedef void* (*create_fun)();
+10 
+11 class ClassFactory{
+12 public:
+13     ~ClassFactory() {}; 
+14 
+15     //根据类注册时的名字, 创建类实例, 并返回
+16     void* getClassByName(std::string name){
+17         std::map<std::string, create_fun>::iterator it = my_map.find(name);
+18         if (it == my_map.end()) { return NULL; }
+19 
+20         create_fun fun = it->second;
+21         if (!fun) { return NULL; }
+22 
+23         return fun();
+24     }   
+25 
+26     //注册类名称与指针函数到映射关系
+27     void registClass(std::string name, create_fun fun){
+28         my_map[name] = fun;
+29     }   
+30 
+31     //单例模式
+32     static ClassFactory& getInstance(){
+33         static ClassFactory fac;
+34         return fac;
+35     }   
+36 
+37 private:
+38     ClassFactory() {};  //私有
+39     std::map<std::string, create_fun> my_map;
+40 }; 
+41 
+42 #endif
+复制代码
+ test.h
+
+复制代码
+ 1 #ifndef __TEST_H
+ 2 #define __TEST_H
+ 3 
+ 4 #include <iostream>
+ 5 
+ 6 class Test{
+ 7 public:
+ 8     Test(){ std::cout << "call Test Constructor fun" << std::endl; }
+ 9     ~Test(){ std::cout << "call Test Destructor fun" << std::endl; }
+10     void print(){ std::cout << "call Test print fun" << std::endl; }
+11 };
+12 
+13 void* create_Test(){
+14     Test *t = new Test;
+15     return (t == NULL)? NULL:t;
+16 }
+17 
+18 #endif
+复制代码
+main.cpp
+
+复制代码
+ 1 #include "test.h"
+ 2 #include "class_factory.h"
+ 3 
+ 4 int main(){
+ 5     //注册
+ 6     ClassFactory::getInstance().registClass("Test", create_Test);
+ 7 
+ 8     //获取类对象
+ 9     Test *t = (Test*)ClassFactory::getInstance().getClassByName("Test");
+10     if (!t){
+11         std::cout << "get instnce Test err;" << std::endl;
+12         return 1;
+13     }   
+14     
+15     t->print();
+16     delete t;
+17     return 0;
+18 }
