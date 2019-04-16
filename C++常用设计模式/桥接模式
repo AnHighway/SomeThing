@@ -1,0 +1,74 @@
+桥接模式：将抽象部分与实现部分分离，使它们都可以独立变换。
+    主要解决：在有很多中可能会变化的情况下，用继承会造成类爆炸问题，不易扩展。
+    如何解决：把不同的分类分离出来，使它们独立变化，减少它们之间的耦合。
+    关键代码：将现实独立出来，抽象类依赖现实类。
+    //将各种App、各种手机全部独立分开，使其自由组合桥接
+class App
+{
+public:
+    virtual ~App(){ cout << "~App()" << endl; }
+    virtual void run() = 0;
+};
+
+class GameApp:public App
+{
+public:
+    void run()
+    {
+        cout << "GameApp Running" << endl;
+    }
+};
+
+class TranslateApp:public App
+{
+public:
+    void run()
+    {
+        cout << "TranslateApp Running" << endl;
+    }
+};
+
+class MobilePhone
+{
+public:
+    virtual ~MobilePhone(){ cout << "~MobilePhone()" << endl;}
+    virtual void appRun(App* app) = 0;  //实现App与手机的桥接
+};
+
+class XiaoMi:public MobilePhone
+{
+public:
+    void appRun(App* app)
+    {
+        cout << "XiaoMi: ";
+        app->run();
+    }
+};
+
+class HuaWei:public MobilePhone
+{
+public:
+    void appRun(App* app)
+    {
+        cout << "HuaWei: ";
+        app->run();
+    }
+};
+
+int main()
+{
+    App* gameApp = new GameApp;
+    App* translateApp = new TranslateApp;
+    MobilePhone* mi = new XiaoMi;
+    MobilePhone* hua = new HuaWei;
+    mi->appRun(gameApp);
+    mi->appRun(translateApp);
+    hua->appRun(gameApp);
+    hua->appRun(translateApp);
+    delete hua;
+    delete mi;
+    delete gameApp;
+    delete translateApp;
+
+    return 0;
+}
